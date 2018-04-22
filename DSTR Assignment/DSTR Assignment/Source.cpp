@@ -1,24 +1,19 @@
 #include <iostream>
+#include <stdlib.h>
 
 using namespace std;
 
-struct column
-{
-	int columnIndex;
-	int value;
-	column *next;
-};
-
-struct row
+struct node
 {
 	int rowIndex;
-	row *next;
-	column *first;
+	int columnIndex;
+	int value;
+	struct Node *next;
 };
 
 class SM {
-	int rowPos, columnPos, element;
-	row *first = NULL, *current = NULL;
+	int rowPos, columnPos, num;
+	node *first = NULL, *current = NULL;
 
 public:
 	int totalRow, totalCol;
@@ -27,6 +22,7 @@ public:
 	~SM();
 	void readElements();
 	void printMatrix();
+	void insertNumber(node *r, node *c);
 };
 
 SM::SM(int rows, int columns)
@@ -47,25 +43,48 @@ SM::~SM()
 
 }
 
+void SM::insertNumber(node *r, node *c)
+{
+	node *temp = new node;
+
+	temp = (struct node *) malloc(sizeof(struct node));
+	temp->rowIndex = r->rowIndex;
+	temp->columnIndex = c->columnIndex;
+	temp->value = c->value;
+	temp->next = NULL;
+}
+
+template<typename T> void printElement(T t, const int& width)
+{
+	cout << left << setw(width) << setfill(separator) << t;
+}
+
 void SM::readElements()
 {
-	row *tempRow = new row;
-	column *tempCol = new column;
-	row *checkRow = new row;
+	node *tempRow = new node;
+	node *tempCol = new node;
 
 	cout << "\nEnter the row you want to input: ";
 	cin >> rowPos;
 	cout << "Enter the column you want to input: ";
 	cin >> columnPos;
 	cout << "Enter a non-zero element: ";
-	cin >> element;
+	cin >> num;
 
-
+	tempRow->rowIndex = rowPos - 1;
+	tempCol->columnIndex = columnPos - 1;
+	tempCol->value = num;
+	tempCol->next = NULL;
+	
+	if (first == NULL)
+	{
+		insertNumber(tempRow, tempCol);
+	}
 }
 
 void SM::printMatrix()
 {
-
+	
 }
 
 void mainMenu()
