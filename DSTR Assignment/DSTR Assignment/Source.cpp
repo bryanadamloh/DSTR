@@ -23,6 +23,7 @@ public:
 	void readElements();
 	void printMatrix();
 	void insertNumber(node *r, node *c);
+	void insertRowNumber(node *r, node *c);
 };
 
 SM::SM(int rows, int columns)
@@ -44,6 +45,17 @@ SM::~SM()
 }
 
 void SM::insertNumber(node *r, node *c)
+{
+	node *temp = new node;
+
+	temp = (struct node *) malloc(sizeof(struct node));
+	temp->rowIndex = r->rowIndex;
+	temp->columnIndex = c->columnIndex;
+	temp->value = c->value;
+	temp->next = NULL;
+}
+
+void SM::insertRowNumber(node *r, node *c)
 {
 	node *temp = new node;
 
@@ -81,18 +93,22 @@ void SM::readElements()
 	if (head == NULL)
 	{
 		insertNumber(tempRow, tempCol);
-		cout << "You have succesfully entered a number!";
 	}
 	else if (head != NULL)
 	{
 		temp = head;
 		while (temp->next != NULL)
-		{
+		{			
+			if (tempRow->rowIndex == temp->rowIndex)
+			{
+				insertRowNumber(temp, tempCol);
+				break;
+			}
 			temp = temp->next;
-			ptr = insertNumber(tempRow, tempCol);
-			temp->next = ptr;
 		}
 	}
+
+	cout << "You have succesfully entered a number!\n";
 }
 
 void SM::printMatrix()
@@ -100,8 +116,9 @@ void SM::printMatrix()
 	node *temp;
 	if (head == NULL)
 	{
-		cout << "Sparse Matrix is empty!";
+		cout << "Sparse Matrix is empty!/n";
 	}
+	
 }
 
 void mainMenu()
