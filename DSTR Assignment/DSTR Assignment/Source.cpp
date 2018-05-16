@@ -8,12 +8,12 @@ struct node
 	int rowIndex;
 	int columnIndex;
 	int value;
-	struct Node *next;
+	struct node *next;
 };
 
 class SM {
 	int rowPos, columnPos, num;
-	node *first = NULL, *current = NULL;
+	node *head = NULL, *current = NULL;
 
 public:
 	int totalRow, totalCol;
@@ -63,6 +63,8 @@ void SM::readElements()
 {
 	node *tempRow = new node;
 	node *tempCol = new node;
+	node *temp = new node;
+	node *ptr = new node;
 
 	cout << "\nEnter the row you want to input: ";
 	cin >> rowPos;
@@ -76,15 +78,30 @@ void SM::readElements()
 	tempCol->value = num;
 	tempCol->next = NULL;
 	
-	if (first == NULL)
+	if (head == NULL)
 	{
 		insertNumber(tempRow, tempCol);
+		cout << "You have succesfully entered a number!";
+	}
+	else if (head != NULL)
+	{
+		temp = head;
+		while (temp->next != NULL)
+		{
+			temp = temp->next;
+			ptr = insertNumber(tempRow, tempCol);
+			temp->next = ptr;
+		}
 	}
 }
 
 void SM::printMatrix()
 {
-	
+	node *temp;
+	if (head == NULL)
+	{
+		cout << "Sparse Matrix is empty!";
+	}
 }
 
 void mainMenu()
@@ -128,6 +145,5 @@ int main()
 	cin >> column;
 
 	SM a(row, column);
-
 	mainMenu();
 }
