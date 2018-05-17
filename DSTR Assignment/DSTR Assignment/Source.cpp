@@ -13,17 +13,18 @@ struct node
 
 class SM {
 	int rowPos, columnPos, num;
-	node *head = NULL, *current = NULL;
+	node *head = NULL, *tail = NULL;
 
 public:
 	int totalRow, totalCol;
+
 	SM();
 	SM(int rows, int columns);
 	~SM();
 	void readElements();
 	void printMatrix();
-	void insertNumber(node *r, node *c);
-	void insertRowNumber(node *r, node *c);
+	void insertFirstNumber(node *d);
+	void insertNumber(node *d);
 };
 
 SM::SM(int rows, int columns)
@@ -44,26 +45,33 @@ SM::~SM()
 
 }
 
-void SM::insertNumber(node *r, node *c)
+void SM::insertFirstNumber(node *d)
 {
 	node *temp = new node;
 
 	temp = (struct node *) malloc(sizeof(struct node));
-	temp->rowIndex = r->rowIndex;
-	temp->columnIndex = c->columnIndex;
-	temp->value = c->value;
+	temp->rowIndex = d->rowIndex;
+	temp->columnIndex = d->columnIndex;
+	temp->value = d->value;
 	temp->next = NULL;
+
+	head = temp;
+	tail = temp;
+	temp = NULL;
 }
 
-void SM::insertRowNumber(node *r, node *c)
+void SM::insertNumber(node *d)
 {
 	node *temp = new node;
 
 	temp = (struct node *) malloc(sizeof(struct node));
-	temp->rowIndex = r->rowIndex;
-	temp->columnIndex = c->columnIndex;
-	temp->value = c->value;
+	temp->rowIndex = d->rowIndex;
+	temp->columnIndex = d->columnIndex;
+	temp->value = d->value;
 	temp->next = NULL;
+
+	tail->next = temp;
+	tail = temp;
 }
 
 template<typename T> void printElement(T t, const int& width)
@@ -73,10 +81,8 @@ template<typename T> void printElement(T t, const int& width)
 
 void SM::readElements()
 {
-	node *tempRow = new node;
-	node *tempCol = new node;
-	node *temp = new node;
-	node *ptr = new node;
+	node *newData = new node;
+	node *temp;
 
 	cout << "\nEnter the row you want to input: ";
 	cin >> rowPos;
@@ -85,40 +91,50 @@ void SM::readElements()
 	cout << "Enter a non-zero element: ";
 	cin >> num;
 
-	tempRow->rowIndex = rowPos - 1;
-	tempCol->columnIndex = columnPos - 1;
-	tempCol->value = num;
-	tempCol->next = NULL;
+	newData->rowIndex = rowPos;
+	newData->columnIndex = columnPos;
+	newData->value = num;
+	newData->next = NULL;
 	
-	if (head == NULL)
+	if (rowPos > totalRow || columnPos > totalCol)
 	{
-		insertNumber(tempRow, tempCol);
+		cout << "Invalid Row/Column Position!\n";
 	}
-	else if (head != NULL)
+	else
 	{
-		temp = head;
-		while (temp->next != NULL)
-		{			
-			if (tempRow->rowIndex == temp->rowIndex)
-			{
-				insertRowNumber(temp, tempCol);
-				break;
-			}
-			temp = temp->next;
+		if (head == NULL)
+		{
+			insertFirstNumber(newData);
 		}
-	}
+		else if (head != NULL)
+		{
+			insertNumber(newData);
+		}
 
-	cout << "You have succesfully entered a number!\n";
+		cout << "You have succesfully entered a number!\n";
+	}
 }
 
 void SM::printMatrix()
 {
-	node *temp;
+	node *temp = new node;
+	temp = head;
+
+	int i, j;
 	if (head == NULL)
 	{
-		cout << "Sparse Matrix is empty!/n";
+		cout << "Sparse Matrix is empty!\n";
 	}
-	
+	else
+	{
+		for (i = 0; i < totalRow; i++)
+		{
+			if (temp == NULL)
+			{
+
+			}
+		}
+	}
 }
 
 void mainMenu()
@@ -128,7 +144,7 @@ void mainMenu()
 
 	while (1)
 	{
-		cout << "-----------------------------------\n";
+		cout << "\n-----------------------------------\n";
 		cout << "  Sparse Matrix using Linked List  \n";
 		cout << "-----------------------------------\n";
 		cout << "1. Add new elements into the matrix\n";
