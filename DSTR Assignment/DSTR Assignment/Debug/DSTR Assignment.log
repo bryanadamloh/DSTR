@@ -1,4 +1,2 @@
 ﻿  Source.cpp
-c:\users\user\documents\github\dstr\dstr assignment\dstr assignment\source.cpp(85): warning C4101: 'temp': unreferenced local variable
-c:\users\user\documents\github\dstr\dstr assignment\dstr assignment\source.cpp(123): warning C4101: 'j': unreferenced local variable
   DSTR Assignment.vcxproj -> C:\Users\User\Documents\GitHub\DSTR\DSTR Assignment\Debug\DSTR Assignment.exe
