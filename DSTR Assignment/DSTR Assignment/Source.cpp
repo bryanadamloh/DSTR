@@ -20,7 +20,6 @@ class SM
 public:
 	int totalRow, totalCol;
 
-	SM();
 	SM(int rows, int columns);
 	~SM();
 	void readElements();
@@ -36,11 +35,6 @@ SM::SM(int rows, int columns)
 {
 	totalRow = rows;
 	totalCol = columns;
-}
-
-SM::SM()
-{
-
 }
 
 //Destructor for freeing memory allocation of linked list
@@ -258,122 +252,124 @@ void SM::printMatrix()
 //Addition algorithm for matrices (Between 2 sparse matrix)
 void SM::addSM(SM *secondMatrix)
 {
-	node *matrixA = new node;
-	node *matrixB = new node;
+	node *firstM = new node;
+	node *secondM = new node;
 
-	matrixA = this->head;
-	matrixB = secondMatrix->head;
+	firstM = this->head;
+	secondM = secondMatrix->head;
 
-	node *templist = new node;
-	templist = NULL;
-	node *start = new node;
-	start = NULL;
+	node *list = new node;
+	list = NULL;
+	node *newM = new node;
+	newM = NULL;
 
-	while (matrixA != NULL || matrixB != NULL) 
+	while (firstM != NULL || secondM != NULL)
 	{
 		node *temp = new node;
-		if (matrixA == NULL) 
+		if (firstM == NULL)
 		{
-			templist->next = matrixB;
+			list->next = secondM;
 			break;
 
 		}
-		else if (matrixB == NULL)
+		else if (secondM == NULL)
 		{
-			templist->next = matrixA;
+			list->next = firstM;
 			break;
 		}
 		//Comparing the value of row between 2 matrices
 		//If both matrices having the same row index
-		if (matrixA->rowIndex == matrixB->rowIndex)
+		if (firstM->rowIndex == secondM->rowIndex)
 		{
-			if (matrixA->columnIndex == matrixB->columnIndex) 
+			//If both first matrix and second matrix column are the same, sum it up
+			if (firstM->columnIndex == secondM->columnIndex)
 			{
-				temp->rowIndex = matrixA->rowIndex;
-				temp->columnIndex = matrixA->columnIndex;
-				temp->value = matrixA->value + matrixB->value;
+				temp->rowIndex = firstM->rowIndex;
+				temp->columnIndex = firstM->columnIndex;
+				temp->value = firstM->value + secondM->value;
 				temp->next = NULL;
-				matrixA = matrixA->next;
-				matrixB = matrixB->next;
+				firstM = firstM->next;
+				secondM = secondM->next;
 
 			}
-			else if (matrixA->columnIndex < matrixB->columnIndex)
+			else if (firstM->columnIndex < secondM->columnIndex)
 			{
-				temp->rowIndex = matrixA->rowIndex;
-				temp->columnIndex = matrixA->columnIndex;
-				temp->value = matrixA->value;
+				temp->rowIndex = firstM->rowIndex;
+				temp->columnIndex = firstM->columnIndex;
+				temp->value = firstM->value;
 				temp->next = NULL;
-				matrixA = matrixA->next;
+				firstM = firstM->next;
 
 			}
-			else if (matrixA->columnIndex > matrixB->columnIndex) 
+			else if (firstM->columnIndex > secondM->columnIndex)
 			{
-				temp->rowIndex = matrixB->rowIndex;
-				temp->columnIndex = matrixB->columnIndex;
-				temp->value = matrixB->value;
+				temp->rowIndex = secondM->rowIndex;
+				temp->columnIndex = secondM->columnIndex;
+				temp->value = secondM->value;
 				temp->next = NULL;
-				matrixA = matrixA->next;
-				matrixB = matrixB->next;
+				firstM = firstM->next;
+				secondM = secondM->next;
 			}
-			if (start == NULL) 
+			if (newM == NULL)
 			{
-				start = temp;
-				templist = temp;
+				newM = temp;
+				list = temp;
 			}
 			else 
 			{
-				templist->next = temp;
-				templist = templist->next;
+				list->next = temp;
+				list = list->next;
 			}
 		}
 		//If the row index of second matrix is bigger than the first one
-		else if (matrixA->rowIndex < matrixB->rowIndex) 
+		else if (firstM->rowIndex < secondM->rowIndex)
 		{
-			temp->rowIndex = matrixA->rowIndex;
-			temp->columnIndex = matrixA->columnIndex;
-			temp->value = matrixA->value;
+			temp->rowIndex = firstM->rowIndex;
+			temp->columnIndex = firstM->columnIndex;
+			temp->value = firstM->value;
 			temp->next = NULL;
-			matrixA = matrixA->next;
+			firstM = firstM->next;
 
-			if (start == NULL)
+			if (newM == NULL)
 			{
-				start = temp;
-				templist = temp;
+				newM = temp;
+				list = temp;
 
 			}
 			else
 			{
-				templist->next = temp;
-				templist = templist->next;
+				list->next = temp;
+				list = list->next;
 			}
 
 		}
 		//If the row index of the first matrix is bigger than the second matrix
-		else if (matrixA->rowIndex > matrixB->rowIndex) 
+		else if (firstM->rowIndex > secondM->rowIndex)
 		{
-			temp->rowIndex = matrixB->rowIndex;
-			temp->columnIndex = matrixB->columnIndex;
-			temp->value = matrixB->value;
+			temp->rowIndex = secondM->rowIndex;
+			temp->columnIndex = secondM->columnIndex;
+			temp->value = secondM->value;
 			temp->next = NULL;
-			matrixB = matrixB->next;
+			secondM = secondM->next;
 
-			if (start == NULL)
+			if (newM == NULL)
 			{
-				start = temp;
-				templist = temp;
+				newM = temp;
+				list = temp;
 
 			}
 			else
 			{
-				templist->next = temp;
-				templist = templist->next;
+				list->next = temp;
+				list = list->next;
 			}
 
 		}
 	}
 
+	//Newly added matrix to be displayed
 	SM *newMatrix = new SM(totalRow, totalCol);
-	newMatrix->head = start;
+	newMatrix->head = newM;
 	cout << "New Matrix:\n";
 	newMatrix->printMatrix();
 }
