@@ -254,14 +254,12 @@ void SM::addSM(SM *secondMatrix)
 {
 	node *firstM = new node;
 	node *secondM = new node;
+	node *list = new node;
+	node *newM = new node;
 
 	firstM = this->head;
 	secondM = secondMatrix->head;
-
-	node *list = new node;
-	list = NULL;
-	node *newM = new node;
-	newM = NULL;
+	list = NULL; newM = NULL;
 
 	while (firstM != NULL || secondM != NULL)
 	{
@@ -281,31 +279,29 @@ void SM::addSM(SM *secondMatrix)
 		//If both matrices having the same row index
 		if (firstM->rowIndex == secondM->rowIndex)
 		{
-			//If both first matrix and second matrix column are the same, sum it up
-			if (firstM->columnIndex == secondM->columnIndex)
-			{
-				temp->rowIndex = firstM->rowIndex;
-				temp->columnIndex = firstM->columnIndex;
-				temp->value = firstM->value + secondM->value;
-				temp->next = NULL;
-				firstM = firstM->next;
-				secondM = secondM->next;
-
-			}
-			else if (firstM->columnIndex < secondM->columnIndex)
+			if (firstM->columnIndex < secondM->columnIndex)
 			{
 				temp->rowIndex = firstM->rowIndex;
 				temp->columnIndex = firstM->columnIndex;
 				temp->value = firstM->value;
 				temp->next = NULL;
 				firstM = firstM->next;
-
 			}
 			else if (firstM->columnIndex > secondM->columnIndex)
 			{
 				temp->rowIndex = secondM->rowIndex;
 				temp->columnIndex = secondM->columnIndex;
 				temp->value = secondM->value;
+				temp->next = NULL;
+				firstM = firstM->next;
+				secondM = secondM->next;
+			}
+			//If both first matrix and second matrix column are the same, sum it up
+			else if (firstM->columnIndex == secondM->columnIndex)
+			{
+				temp->rowIndex = firstM->rowIndex;
+				temp->columnIndex = firstM->columnIndex;
+				temp->value = firstM->value + secondM->value;
 				temp->next = NULL;
 				firstM = firstM->next;
 				secondM = secondM->next;
@@ -320,28 +316,6 @@ void SM::addSM(SM *secondMatrix)
 				list->next = temp;
 				list = list->next;
 			}
-		}
-		//If the row index of second matrix is bigger than the first one
-		else if (firstM->rowIndex < secondM->rowIndex)
-		{
-			temp->rowIndex = firstM->rowIndex;
-			temp->columnIndex = firstM->columnIndex;
-			temp->value = firstM->value;
-			temp->next = NULL;
-			firstM = firstM->next;
-
-			if (newM == NULL)
-			{
-				newM = temp;
-				list = temp;
-
-			}
-			else
-			{
-				list->next = temp;
-				list = list->next;
-			}
-
 		}
 		//If the row index of the first matrix is bigger than the second matrix
 		else if (firstM->rowIndex > secondM->rowIndex)
@@ -365,6 +339,29 @@ void SM::addSM(SM *secondMatrix)
 			}
 
 		}
+		//If the row index of second matrix is bigger than the first one
+		else if (firstM->rowIndex < secondM->rowIndex)
+		{
+			temp->rowIndex = firstM->rowIndex;
+			temp->columnIndex = firstM->columnIndex;
+			temp->value = firstM->value;
+			temp->next = NULL;
+			firstM = firstM->next;
+
+			if (newM == NULL)
+			{
+				newM = temp;
+				list = temp;
+
+			}
+			else
+			{
+				list->next = temp;
+				list = list->next;
+			}
+
+		}
+		
 	}
 
 	//Newly added matrix to be displayed
