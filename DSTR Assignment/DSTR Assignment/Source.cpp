@@ -27,6 +27,8 @@ public:
 	void printMatrix();
 	void insertFirstNumber(node *d);
 	void insertLastNumber(node *d);
+	void insertFirstRowColNumber(node *d);
+	void insertMiddleNumber(node *d);
 	void addSM(SM *newMatrix);
 };
 
@@ -89,7 +91,36 @@ void SM::insertLastNumber(node *d)
 	tail = temp;
 }
 
-template<typename T> void printElement(T t, const int& width)
+//Insert the value on the first row and column indexes
+void SM::insertFirstRowColNumber(node *d)
+{
+	node *temp = new node;
+
+	temp = (struct node *) malloc(sizeof(struct node));
+	temp->rowIndex = d->rowIndex;
+	temp->columnIndex = d->columnIndex;
+	temp->value = d->value;
+	
+	temp->next = head;
+	head = temp;
+}
+
+//Insert the value between the head and tail node of the linked list, depending on the row and column index
+void SM::insertMiddleNumber(node *d)
+{
+	node *temp = new node;
+	node *prev = head;
+
+	temp = (struct node *) malloc(sizeof(struct node));
+	temp->rowIndex = d->rowIndex;
+	temp->columnIndex = d->columnIndex;
+	temp->value = d->value;
+
+	temp->next = prev->next;
+	prev->next = temp;
+}
+
+template<typename T> void printValue(T t, const int& width)
 {
 	const char separator = ' ';
 	cout << left << setw(width) << setfill(separator) << t;
@@ -113,6 +144,7 @@ void SM::readElements()
 	newData->value = num;
 	newData->next = NULL;
 	
+	//Validation
 	//If row or column is more than the total row and column given
 	if (rowPos > totalRow || columnPos > totalCol)
 	{
@@ -126,10 +158,39 @@ void SM::readElements()
 		{
 			insertFirstNumber(newData);
 		}
-		//If there are linked list existed, add to the tail of the linked list
-		else
+		//If the row and column indexes are 1, insert at this position as head node
+		else if (newData->rowIndex == 1 && newData->columnIndex == 1)
 		{
-			insertLastNumber(newData);
+			insertFirstRowColNumber(newData);
+		}
+		//If the linked list is not empty (There is head node), execute this statement
+		else if (temp != NULL)
+		{
+			//Looping through the temp to compare the input row and column with the temp row and column
+			while (temp != NULL)
+			{
+				//If the temp row and column is bigger than the input row and column, insert the node in the middle of the linked list
+				if (newData->rowIndex < temp->rowIndex + 1 && newData->columnIndex < temp->columnIndex + 1)
+				{
+					insertMiddleNumber(newData);
+					break;
+				}
+				//If not, traverse to the next node and check for condition
+				else
+				{
+					temp = temp->next;
+				}
+			}
+
+			//Insert the node as the tail of the linked list if its equal to the total row and column which is the last
+			if (newData->rowIndex == totalRow && newData->columnIndex == totalCol)
+			{
+				insertLastNumber(newData);
+			}
+			else
+			{
+				insertLastNumber(newData);
+			}
 		}
 
 		cout << "You have succesfully entered a number!\n";
@@ -170,12 +231,12 @@ void SM::printMatrix()
 						if (temp->value != NULL)
 						{
 							condition = true;
-							printElement(temp->value, colWidth);
+							printValue(temp->value, colWidth);
 							temp = temp->next;
 						}
 						else
 						{
-							printElement(0, colWidth);
+							printValue(0, colWidth);
 						}
 					}
 					//This statement traverse the node to the next node, and compare the row and column index again with the for loop condition
@@ -186,10 +247,9 @@ void SM::printMatrix()
 				}
 				if (condition == false)
 				{
-					printElement(0, colWidth);
+					printValue(0, colWidth);
 				}
 			}
-
 			cout << endl;
 		}
 	}
