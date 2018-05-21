@@ -41,6 +41,7 @@ SM::SM()
 
 }
 
+//Destructor for freeing memory allocation of linked list
 SM::~SM()
 {
 	node * temp = head;
@@ -57,6 +58,7 @@ SM::~SM()
 	cout << "Sparse Matrix has been successfully deleted!\n";
 }
 
+//Insert on the first head node of the linked list
 void SM::insertFirstNumber(node *d)
 {
 	node *temp = new node;
@@ -72,6 +74,7 @@ void SM::insertFirstNumber(node *d)
 	temp = NULL;
 }
 
+//Insert on the last node of the linked list
 void SM::insertLastNumber(node *d)
 {
 	node *temp = new node;
